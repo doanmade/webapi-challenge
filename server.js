@@ -3,12 +3,12 @@ const express = require("express");
 const server = express();
 
 const actionRouter = require("./data/router/actionRouter.js");
-const projectRouter = require("./data/router/projectRouter.js");
+// // const projectRouter = require("./data/router/projectRouter.js");
 server.use(express.json());
 server.use(logger);
 
 server.use("/api/actions", actionRouter);
-server.use("/api/projects", projectRouter);
+// server.use("/api/projects", projectRouter);
 server.get("/", (req, res) => {
   res
     .status(200)
