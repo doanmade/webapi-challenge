@@ -15,8 +15,16 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", validateActionId, (req, res) => {
-  const actions = req.params.actions;
-  res.status(200).json(actions);
+  const { id } = req.params;
+  Action.get(id)
+    .then(actions => {
+      res.status(200).json(actions);
+    })
+    .catch(err => {
+      res.status(500).json({
+        errMessage: `There has been an issue when fetching actions id# ${id}`
+      });
+    });
 });
 
 router.post("/", validateActionPost, (req, res) => {
