@@ -31,43 +31,37 @@ router.post("/", validateActionPost, (req, res) => {
     });
 });
 
-router.put("/:id", validateActionId, (req, res) => {});
-const { description, notes } = req.body;
-const { id } = req.params;
-Actions.update(id, { description, notes })
-  .then(updated => {
-    if (updated) {
-      User.get(id)
-        .then(actions => {
-          res.status(200).json(actions);
-        })
-        .catch(err => {
-          console.log(err);
-          res.status(500).json({ error: "Error getting actions" });
-        });
-    }
-  })
-  .catch(err => {
-    res.status(500).json({ error: "Error Updating actions" });
-  });
-
-router.delete("/:id", validateActionId, (req, res) => {});
-// const { id } = req.params;
-Action.remove(id)
-  .then(() => {
-    res
-      .status(204)
-      .json({
-        message: `The action with id ${id} has been removed from the server`
-      })
-      .end();
-  })
-  .catch(err => {
-    console.log("err", err);
-    res.status(500).json({
-      errMessage: `There was an issue when deleting action with the id of ${id}!! They just wont die!!`
+router.put("/:id", validateActionId, (req, res) => {
+  const changes = req.body;
+  const { id } = req.params;
+  Action.update(id, changes)
+    .then(updated => {
+      res.status(200).json(updated);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "Error getting actions" });
     });
-  });
+});
+
+router.delete("/:id", validateActionId, (req, res) => {
+  const { id } = req.params;
+  Action.remove(id)
+    .then(() => {
+      res
+        .status(204)
+        .json({
+          message: `The action with id ${id} has been removed from the server`
+        })
+        .end();
+    })
+    .catch(err => {
+      console.log("err", err);
+      res.status(500).json({
+        errMessage: `There was an issue when deleting action with the id of ${id}!! They just wont die!!`
+      });
+    });
+});
 
 //custom middleware
 
@@ -81,19 +75,6 @@ function validateActionId(req, res, next) {
       res.status(404).json({ error: "this actions id does not exist" });
     }
   });
-}
-
-function validateUser(req, res, next) {
-  const { name } = req.body;
-  if (!name) {
-    return res.status(400).json({ errMessage: "a User has no name" });
-  }
-  if (typeof name !== "string") {
-    return res
-      .status(400)
-      .json({ errMessage: "a User's name must contain letters" });
-  }
-  next();
 }
 
 function validateActionPost(req, res, next) {
