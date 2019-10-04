@@ -11,4 +11,13 @@ there is no data on that route, just write some code, you'll sort it out… don'
 I need this code, just don't know where, perhaps should make some middleware, don't worry, be happy
 
 Go code!
+
+I Want you to know i pull up the song and sang this outloud with it haha best part of the project so far
+
+**"What went well this sprint?" - "The Sing along hahahaha"
 */
+
+const server = require("./server.js");
+
+const port = process.env.PORT || 8000;
+server.listen(port, () => console.log(`\n api runningon ${port}\n`));
